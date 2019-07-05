@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "0.1",
+	"VersionName": "0.2",
 	"FriendlyName": "LocalMultiplayerInputTweaker",
 	"Description": "Plugin for more easily tweaking local input settings. Currently only stops MotionController from being offset along with gamepads",
 	"Category": "Input",
@@ -18,8 +18,7 @@
 			"Name": "LocalMultiplayerInputTweaker",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"WhitelistPlatforms" :
-			[
+			"WhitelistPlatforms": [
 				"Win64",
 				"Win32"
 			]

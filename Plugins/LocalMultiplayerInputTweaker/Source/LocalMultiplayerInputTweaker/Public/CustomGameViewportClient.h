@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class LOCALMULTIPLAYERINPUTTWEAKER_API UCustomGameViewportClient : public UGameViewportClient
 {
 	GENERATED_BODY()
@@ -17,5 +17,12 @@ class LOCALMULTIPLAYERINPUTTWEAKER_API UCustomGameViewportClient : public UGameV
 
 	virtual bool InputKey(const FInputKeyEventArgs& EventArgs) override;
 	virtual bool InputAxis(FViewport* Viewport, int32 ControllerId, FKey Key, float Delta, float DeltaTime, int32 NumSamples = 1, bool bGamepad = false) override;
-	
+	virtual bool InputChar(FViewport* InViewport, int32 ControllerId, TCHAR Character);
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int KeyboardInputOffset = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int GamepadInputOffset = 0;
 };

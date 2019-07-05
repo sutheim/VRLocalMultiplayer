@@ -103,9 +103,9 @@ bool UCustomGameViewportClient::InputAxis(FViewport* InViewport, int32 Controlle
 
 	const int32 NumLocalPlayers = World ? World->GetGameInstance()->GetNumLocalPlayers() : 0;
 
-	if (NumLocalPlayers > 1 && Key.IsGamepadKey() && GetDefault<UGameMapsSettings>()->bOffsetPlayerGamepadIds && !Key.GetFName().ToString().Contains("MotionController") && !Key.GetFName().ToString().Contains("Oculus"))
+	if (NumLocalPlayers > 1 && Key.IsGamepadKey() && !Key.GetFName().ToString().Contains("MotionController") && !Key.GetFName().ToString().Contains("Oculus"))
 	{
-		++ControllerId;
+		ControllerId += GamepadInputOffset;
 	}
 	else if (InViewport->IsPlayInEditorViewport() && Key.IsGamepadKey())
 	{
@@ -149,6 +149,31 @@ bool UCustomGameViewportClient::InputAxis(FViewport* InViewport, int32 Controlle
 			// Absorb all keys so game input events are not routed to the Slate editor frame
 			bResult = true;
 		}
+	}
+
+	return bResult;
+}
+
+bool UCustomGameViewportClient::InputChar(FViewport* InViewport, int32 ControllerId, TCHAR Character)
+{
+	// should probably just add a ctor to FString that takes a TCHAR
+	FString CharacterString;
+	CharacterString += Character;
+	ControllerId += KeyboardInputOffset;
+
+	//Always route to the console
+	bool bResult = (ViewportConsole ? ViewportConsole->InputChar(ControllerId, CharacterString) : false);
+
+	if (IgnoreInput())
+	{
+		return bResult;
+	}
+
+	// route to subsystems that care
+	if (!bResult && InViewport->IsSlateViewport() && InViewport->IsPlayInEditorViewport())
+	{
+		// Absorb all keys so game input events are not routed to the Slate editor frame
+		bResult = true;
 	}
 
 	return bResult;
